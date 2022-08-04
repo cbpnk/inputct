@@ -1043,9 +1043,10 @@ def _IO(nr, len=None):
 
 class EventDevice:
 
-    def __init__(self, dev):
+    def __init__(self, dev, mode=0):
         self.dev = dev
         self.fd = None
+        self.mode = 0
 
     def _readfile(self, name):
         with open(f"/sys/class/input/{self.dev}/device/{name}") as f:
@@ -1084,7 +1085,7 @@ class EventDevice:
         return self.fd
 
     def open(self):
-        self.fd = os.open(os.fspath(f"/dev/input/{self.dev}"), os.O_RDWR)
+        self.fd = os.open(os.fspath(f"/dev/input/{self.dev}"), os.O_RDWR | self.mode)
 
     def close(self):
         if self.fd is not None:
